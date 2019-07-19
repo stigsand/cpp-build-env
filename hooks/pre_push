@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Custom 'pre-push' hook for Docker Hub's automated builds.
+# See https://docs.docker.com/docker-hub/builds/advanced/
+
+echo "---- PRE-PUSH HOOK BEGIN ----"
+printenv
+echo "Current directory: $(pwd)"
+ls -l -a
+echo "Docker Images (all):"
+docker image ls --all
+echo "---- PRE-PUSH HOOK END ----"
