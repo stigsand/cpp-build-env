@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Custom 'push' phase for Docker Hub's automated builds.
+# See https://docs.docker.com/docker-hub/builds/advanced/.
+# IMAGE_NAME environment variable set by Docker Hub.
+
+set -e
+
+echo "---- PUSH HOOK BEGIN ----"
+./push-image.sh "${IMAGE_NAME}"
+echo "---- PUSH HOOK END ----"

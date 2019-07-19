@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Custom 'build' phase for Docker Hub's automated builds.
+# See https://docs.docker.com/docker-hub/builds/advanced/.
+# SOURCE_COMMIT environment variable set by Docker Hub.
+
+set -e
+
+echo "---- BUILD HOOK BEGIN ----"
+export GIT_REV="${SOURCE_COMMIT}"
+./build-image.sh
+echo "---- BUILD HOOK END ----"

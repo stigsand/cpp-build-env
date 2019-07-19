@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Custom 'test' phase for Docker Hub's automated builds.
+# See https://docs.docker.com/docker-hub/builds/advanced/.
+
+set -e
+
+echo "---- TEST HOOK BEGIN ----"
+./test-image.sh
+echo "---- TEST HOOK END ----"
