@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Custom 'post-push' hook for Docker Hub's automated builds.
+# See https://docs.docker.com/docker-hub/builds/advanced/
+
+echo "---- POST-PUSH HOOK BEGIN ----"
+printenv
+echo "Current directory: $(pwd)"
+ls -l -a
+echo "Docker Images (all):"
+docker image ls --all
+echo "---- POST-PUSH HOOK END ----"

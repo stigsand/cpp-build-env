@@ -1,0 +1,39 @@
+# Building: See build-docker-image.sh
+#
+# Running: docker container run --tty --rm wx2-interop-test [arguments to GTest binary]
+#
+#   If no arguments are provided, "--help" is assumed.
+#
+#   Use "--env" to pass environment variables to tests. Example:
+#     docker container run \
+#       --tty --rm --env WX2_TEST_ACCOUNT_PERMANENT=1 \
+#       wx2-interop-test \
+#       --gtest_also_run_disabled_tests --gtest_filter=*create_room_account* \
+#       --logger=console
+#
+#   Interactive session: docker container run --tty -i --rm --entrypoint /bin/bash wx2-interop-test
+#
+# Tested with Docker version 18.06.3
+
+FROM ubuntu:18.04
+
+ARG GIT_REV="<unspecified Git revision>"
+ARG BUILD_DATE="<unspecified build date>"
+
+LABEL \
+    description="Image for running wx2-interop-test" \
+    maintainer="Stig Sandnes <stigsand@cisco.com>" \
+    created="${BUILD_DATE}" \
+    git_revision="${GIT_REV}"
+
+RUN groupadd tester && useradd -m -g tester tester
+USER tester
+WORKDIR /tester
+
+COPY wx2-interop-test /opt
+COPY cacerts_spark_core_bundle /opt/functional/apps/ca-certificates/cacerts_spark_core_bundle
+COPY cacerts_android_default /opt/functional/apps/ca-certificates/cacerts_android_default
+ENV WX2_CA_BASE_PATH=/opt
+
+ENTRYPOINT ["/opt/wx2-interop-test"]
+CMD ["--help"]
