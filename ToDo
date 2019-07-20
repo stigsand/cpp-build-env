@@ -1,1 +1,22 @@
-Add shellchec
+Install Conan 1.17.0 in comit msg
+Bash regex format
+Bash force output and error
+--
+CMake: update to 3.15
+  https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0.tar.gz
+  85d432d72807df63e1e665c36382442d3e53c1b5c5d326f0cd2c7733e8bafea5  cmake-3.15.0-Linux-x86_64.sh
+  5a681e37b142006ab44aef9b976db610dc5d94124da41743ff53412f4b36a7fe  cmake-3.15.0-Linux-x86_64.tar.gz
+CMake -S -B arguments
+--
+Silent conan install
+--
+apt-get list versions (apt-cache madison?)
+hadolint suggestions
+--
+Option to test-image.sh to skip linting?
+--
+Push Conan install
+--
+Add shellchecking
+--
+Gist-ing Docker Hub hooks
