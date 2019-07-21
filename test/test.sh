@@ -12,3 +12,6 @@ conan install \
     --generator cmake \
     Catch2/2.9.1@catchorg/stable \
     > /dev/null
+
+# GCC 9.1.0
+[[ "$(g++ --version)" =~ 9\.1\.0 ]] || (>&2 echo "GCC version test failed" && false)
