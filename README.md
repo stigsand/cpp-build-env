@@ -1,2 +1,2 @@
 # cpp-build-env
-A Docker-based build environment for C++ projects
+An OCI container-based build environment for C++ projects

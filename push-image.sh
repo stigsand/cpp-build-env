@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-# Assumes logged in to the target Docker registry.
+# Assumes logged in to the target container registry.
 
 set -e
 
+source use-podman
+
 if [ -z "${1}" ]; then
-    echo "Provide Docker repository name:tag as argument"
+    echo "Provide target container repository name:tag as argument"
     exit 1
 fi
 

@@ -2,7 +2,7 @@
 
 set -e
 
-echo "Running test script inside Docker container..."
+echo "Running test script inside container..."
 
 # Conan 1.18.1
 [[ "$(conan --version)" =~ 1\.18\.1 ]] || (>&2 echo "Conan version test failed" && false)

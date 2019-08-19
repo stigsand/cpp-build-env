@@ -2,6 +2,8 @@
 
 set -e
 
+source use-podman
+
 GIT_REV="${GIT_REV:-$(git rev-parse --short=8 HEAD)}"
 
 docker image build \

@@ -1,0 +1,7 @@
+# This file must be sourced from Bash
+
+if [ ! -z "${USE_PODMAN}" ]; then
+    docker () {
+	command podman "$@"
+    }
+fi
