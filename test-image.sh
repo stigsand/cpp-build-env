@@ -4,7 +4,7 @@ set -e
 
 source use-podman
 
-docker container run --rm -i hadolint/hadolint:v1.17.1 hadolint - < Dockerfile
+# docker container run --rm -i hadolint/hadolint:v1.17.1 hadolint - < Dockerfile
 docker container run --rm --tty \
     -v "$(pwd)":/mnt \
     koalaman/shellcheck:v0.6.0 \

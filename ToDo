@@ -7,3 +7,13 @@ CMake: update to 3.15
 CMake -S -B arguments
 --
 Gist-ing Docker Hub hooks
+
+
+Conan Center
+conan-center: https://bintray.com/conan/conan-center
+
+This repository contains moderated, curated and well-maintained packages, and is the place in which you can share your packages with the community. To share your package, upload it to your own (or your organization’s) repositories and submit an inclusion request to conan-center. Check conan-center guide for more information.
+
+Conan comes with conan-center repository configured by default. Just in case you want to manually configure this repository you can always add it like this:
+
+$ conan remote add conan-center https://conan.bintray.com
