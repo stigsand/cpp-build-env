@@ -4,8 +4,8 @@ set -e
 
 echo "Running test script inside Docker container..."
 
-# Conan 1.17.0
-[[ "$(conan --version)" =~ 1\.17\.0 ]] || (>&2 echo "Conan version test failed" && false)
+# Conan 1.18.1
+[[ "$(conan --version)" =~ 1\.18\.1 ]] || (>&2 echo "Conan version test failed" && false)
 BUILD_DIR="$(mktemp --directory --tmpdir)"
 conan install \
     --install-folder "${BUILD_DIR}" \
