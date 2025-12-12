@@ -1,53 +1,116 @@
-# Use recent Ubuntu LTS as base
-FROM ubuntu:22.04
+# syntax=docker/dockerfile:1
+FROM ubuntu:25.10
 
-# Set environment variables to avoid interactive prompts
-ENV DEBIAN_FRONTEND=noninteractive \
+# ToDo - from tt - check out
+LABEL maintainer="Stig Sandnes <stig_sandnes@hotmail.com>" \
+    description="C++ build environment with GCC, Clang, CMake, Conan, Ninja, and Mold"
+
+# Avoid interactive prompts during package installation - ToDo - from tt - check out
+ARG DEBIAN_FRONTEND=noninteractive \
     TZ=Etc/UTC
 
 # Use pipefail to catch errors in pipes
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Install basic dependencies and tools
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install --yes --no-install-recommends \
+    wget \
+    gnupg \
+    gpg \
+    software-properties-common \
+    ca-certificates \
+    lsb-release \
+    curl \
+    git \
+    build-essential \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN \
+    # Add Kitware APT repository for latest CMake
+    wget --no-verbose -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
+        | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
+        && echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main" \
+        | tee /etc/apt/sources.list.d/kitware.list >/dev/null \
+    # Add LLVM APT repository for Clang
+    && wget --no-verbose -O - https://apt.llvm.org/llvm-snapshot.gpg.key \
+        | gpg --dearmor - | tee /usr/share/keyrings/llvm-archive-keyring.gpg >/dev/null \
+        && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/$(lsb_release -cs)/ llvm-toolchain-$(lsb_release -cs)-21 main" \
+        | tee /etc/apt/sources.list.d/llvm.list >/dev/null \
+    # Add Ubuntu Toolchain PPA for latest GCC
+    && add-apt-repository --yes --no-update ppa:ubuntu-toolchain-r/ppa
+
 # Install build tools and dependencies
 # hadolint ignore=DL3008
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    # GCC
-    gcc \
-    g++ \
-    # Clang
-    clang \
-    clang-tools \
-    clang-format \
-    clang-tidy \
-    libc++-dev \
-    libc++abi-dev \
+RUN apt-get update && apt-get install --yes --no-install-recommends \
+    # GCC 15
+    gcc-15 \
+    g++-15 \
+    # Clang/LLVM 21
+    clang-21 \
+    clang-tools-21 \
+    clang-format-21 \
+    clangd-21 \
+    clang-tidy-21 \
+    libc++-21-dev \
+    libc++abi-21-dev \
+    libclang-rt-21-dev \
+    lld-21 \
+    lldb-21 \
+    llvm-21 \
+    libfuzzer-21-dev \
     # CMake
     cmake \
+    cmake-curses-gui \
+    cmake-format \
     # Ninja
     ninja-build \
-    # Mold linker
+    # Mold
     mold \
     # Python for Conan
     python3 \
     python3-pip \
     python3-venv \
-    # Additional useful tools
+    pipx \
+    # Additional development tools
     git \
     make \
     pkg-config \
-    && rm -rf /var/lib/apt/lists/*
+    ccache \
+    valgrind \
+    gdb \
+    && rm -rf /var/lib/apt/lists/* \
+    # strace
+    && update-alternatives \
+        --install /usr/bin/gcc gcc /usr/bin/gcc-15 15 \
+        --slave /usr/bin/g++ g++ /usr/bin/g++-15 \
+        --slave /usr/bin/gcov gcov /usr/bin/gcov-15 \
+    && update-alternatives \
+        --install /usr/bin/clang clang /usr/bin/clang-21 21 \
+        --slave /usr/bin/clang++ clang++ /usr/bin/clang++-21 \
+        --slave /usr/bin/clangd clangd /usr/bin/clangd-21 \
+        --slave /usr/bin/clang-format clang-format /usr/bin/clang-format-21 \
+        --slave /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-21 \
+        --slave /usr/bin/run-clang-tidy run-clang-tidy /usr/bin/run-clang-tidy-21
 
-# Install Conan and set up a non-root user for building
-# Note: --trusted-host flags are used to bypass SSL verification in restricted environments
-# In production, ensure SSL certificates are properly configured
-RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host files.pythonhosted.org "conan>=2.0.0" \
-    && useradd -m -s /bin/bash builder
+# Install Conan
+RUN pipx install conan==2.24.0 && pipx ensurepath
+ENV PATH="$PATH:/root/.local/bin"
+RUN conan profile detect
 
 # Set working directory
 WORKDIR /workspace
 
 # Switch to non-root user
-USER builder
+# USER builder
 
-# Set default command
+# Verify installations
+RUN gcc --version && \
+    g++ --version && \
+    clang --version && \
+    cmake --version && \
+    ninja --version && \
+    mold --version
+
 CMD ["/bin/bash"]

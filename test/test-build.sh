@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 
 echo "=== Testing C++ Build Environment ==="
@@ -14,22 +15,38 @@ echo "Ninja: $(ninja --version)"
 echo "Conan: $(conan --version)"
 echo "Mold: $(mold --version)"
 
+cmake \
+    -G Ninja \
+    -DCMAKE_CXX_COMPILER=clang++ \
+    -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -B build/clang \
+    --fresh
+cmake --build build/clang
+build/clang/test_app | grep -qFx "26"
+
+cmake \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_CXX_COMPILER=g++ \
+    -B build/gcc \
+    --fresh
+cmake --build build/gcc
+./build/gcc/test_app | grep -qFx '[1, 2, 3, 4]'
+
+conan install \
+    --requires ctre/3.10.0 \
+    --build=missing \
+    --output-folder=build/conan
+
+exit 0
+
 # Create build directory
 echo ""
 echo "=== Building Test Project ==="
 mkdir -p build
 cd build
 
-# Build with GCC and Ninja
-echo ""
-echo "Building with GCC and Ninja..."
-cmake -G Ninja -DCMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=Release ..
-ninja
-
-# Run the test application
-echo ""
-echo "Running test application (GCC build)..."
-./test_app
 
 # Clean and rebuild with Clang
 echo ""

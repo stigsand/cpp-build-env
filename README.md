@@ -1,17 +1,23 @@
-# cpp-build-env
+# cpp-build-env (work in progress)
 
-A Docker-based build environment for C++ projects with modern build tools.
+[![Build and Publish Image](https://github.com/stigsand/cpp-build-env/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/stigsand/cpp-build-env/actions/workflows/build-and-publish.yml)
+[![Docker Image Size](https://img.shields.io/docker/image-size/stigsand/cpp-build-env/latest)](https://hub.docker.com/r/stigsand/cpp-build-env)
+[![Docker Pulls](https://img.shields.io/docker/pulls/stigsand/cpp-build-env)](https://hub.docker.com/r/stigsand/cpp-build-env)
+[![C++](https://img.shields.io/badge/C++-00599C?logo=cplusplus&logoColor=white)](https://isocpp.org/)
+
+A Docker image for building C++ projects
+
 
 ## Features
 
-This Docker image includes:
+This Docker image includes recent versions of many C++ development tools:
 
-- **Ubuntu 22.04 LTS** as the base image
-- **GCC** - Latest GNU Compiler Collection
-- **Clang** - Latest LLVM C/C++ compiler from apt.llvm.org
-- **CMake** - Latest version from Kitware's official repository
-- **Ninja** - Fast build system
+- **Ubuntu 25.10** as the base image
 - **Conan** - C++ package manager
+- **CMake** - Latest version from Kitware's APT repository
+- **Ninja** - Fast build system
+- **GCC** - GNU Compiler Collection version 15
+- **Clang** - LLVM C/C++ compiler version 21
 - **Mold** - Modern, high-performance linker
 
 ## Usage
@@ -56,6 +62,3 @@ docker run --rm -v $(pwd)/test:/workspace cpp-build-env bash -c "chmod +x /works
 
 The Docker image is automatically built, tested, and published to Docker Hub via GitHub Actions on every push to the main branch.
 
-## License
-
-See LICENSE file for details.
