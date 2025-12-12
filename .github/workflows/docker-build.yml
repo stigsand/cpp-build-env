@@ -51,7 +51,7 @@ jobs:
 
       - name: Test Docker image
         run: |
-          docker run --rm -v ${{ github.workspace }}/test:/workspace ${{ env.DOCKER_IMAGE_NAME }}:test bash -c "chmod +x /workspace/test-build.sh && /workspace/test-build.sh"
+          docker run --rm --user root -v ${{ github.workspace }}/test:/workspace ${{ env.DOCKER_IMAGE_NAME }}:test bash /workspace/test-build.sh
 
   publish:
     name: Publish Docker Image
