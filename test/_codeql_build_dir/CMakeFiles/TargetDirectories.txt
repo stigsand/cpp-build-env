@@ -1,0 +1,3 @@
+/home/runner/work/cpp-build-env/cpp-build-env/test/_codeql_build_dir/CMakeFiles/test_app.dir
+/home/runner/work/cpp-build-env/cpp-build-env/test/_codeql_build_dir/CMakeFiles/edit_cache.dir
+/home/runner/work/cpp-build-env/cpp-build-env/test/_codeql_build_dir/CMakeFiles/rebuild_cache.dir
