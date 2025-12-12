@@ -51,6 +51,7 @@ jobs:
 
       - name: Test Docker image
         run: |
+          # Run as root to avoid permission issues with mounted volume
           docker run --rm --user root -v ${{ github.workspace }}/test:/workspace ${{ env.DOCKER_IMAGE_NAME }}:test bash /workspace/test-build.sh
 
   publish:

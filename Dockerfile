@@ -38,7 +38,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Conan and set up a non-root user for building
-# Install Conan with trusted host flag to work around SSL issues
+# Note: --trusted-host flags are used to bypass SSL verification in restricted environments
+# In production, ensure SSL certificates are properly configured
 RUN pip3 install --no-cache-dir --trusted-host pypi.org --trusted-host files.pythonhosted.org "conan>=2.0.0" \
     && useradd -m -s /bin/bash builder
 

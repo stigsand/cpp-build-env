@@ -34,7 +34,7 @@ echo "Running test application (GCC build)..."
 # Clean and rebuild with Clang
 echo ""
 echo "Building with Clang and Ninja..."
-rm -rf *
+rm -rf ./*
 cmake -G Ninja -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release ..
 ninja
 
@@ -46,7 +46,7 @@ echo "Running test application (Clang build)..."
 # Test with Mold linker
 echo ""
 echo "Building with Mold linker..."
-rm -rf *
+rm -rf ./*
 cmake -G Ninja -DCMAKE_CXX_COMPILER=g++ -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=mold" -DCMAKE_BUILD_TYPE=Release ..
 ninja
 
