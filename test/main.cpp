@@ -1,8 +1,8 @@
-#include <iostream>
-#include <string>
+#include <functional>
+#include <print>
 
-int main() {
-    std::string message = "Hello from C++ build environment!";
-    std::cout << message << std::endl;
-    return 0;
+int main()
+{
+    std::move_only_function<void ()> f = [] { std::println("Hi {}", 24); };
+    f();
 }

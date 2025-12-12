@@ -1,4 +1,3 @@
-# Use recent Ubuntu LTS as base
 FROM ubuntu:22.04
 
 # Set environment variables to avoid interactive prompts

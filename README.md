@@ -1,6 +1,6 @@
 # cpp-build-env
 
-A Docker-based build environment for C++ projects with modern build tools.
+A Docker-based build environment for C++ projects
 
 ## Features
 
@@ -55,7 +55,3 @@ docker run --rm -v $(pwd)/test:/workspace cpp-build-env bash -c "chmod +x /works
 ## CI/CD
 
 The Docker image is automatically built, tested, and published to Docker Hub via GitHub Actions on every push to the main branch.
-
-## License
-
-See LICENSE file for details.
