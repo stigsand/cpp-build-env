@@ -1,15 +1,23 @@
-name: Build and Publish Docker Image
+name: Build and Publish C++ Builder Image
 
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'Dockerfile'
+      - 'test-project/**'
+      - '.github/workflows/docker-build.yml'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'Dockerfile'
+      - 'test-project/**'
+      - '.github/workflows/docker-build.yml'
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE_NAME: stigsand/cpp-build-env
-  
+  IMAGE_NAME: cpp-build-env  # stigsand/cpp-build-env
+
 jobs:
   lint:
     name: Lint Dockerfile
@@ -18,20 +26,20 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  ## newer?
 
       - name: Run Hadolint
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.1.0  # newer?
         with:
           dockerfile: Dockerfile
           failure-threshold: warning
 
   build-and-test:
-    name: Build and Test Docker Image
+    name: Build and Test Image
     runs-on: ubuntu-latest
     needs: lint
     permissions:
-      contents: read
+      contents: read  # ToDo meang?
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -43,23 +51,77 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: ./Dockerfile
           push: false
           load: true
-          tags: ${{ env.DOCKER_IMAGE_NAME }}:test
+          tags: ${{ env.IMAGE_NAME }}:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Test Docker image
         run: |
           # Run as root to avoid permission issues with mounted volume
-          docker run --rm --user root -v ${{ github.workspace }}/test:/workspace ${{ env.DOCKER_IMAGE_NAME }}:test bash /workspace/test-build.sh
+          docker run --rm --user root -v ${{ github.workspace }}/test:/workspace ${{ env.IMAGE_NAME }}:test bash /workspace/test-build.sh
+
+      - name: Test with GCC and Ninja  # from tt
+        run: |
+          docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
+            set -e
+            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+            cmake --build build
+            ./build/test_app
+          "
+
+      - name: Test with Clang  # from tt
+        run: |
+          docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
+            set -e
+            export CC=clang
+            export CXX=clang++
+            cmake -B build-clang -G Ninja -DCMAKE_BUILD_TYPE=Release
+            cmake --build build-clang
+            ./build-clang/test_app
+          "
+
+      - name: Test Conan integration  ## From tt
+        run: |
+          docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
+            set -e
+            conan profile detect --force
+            conan install . --output-folder=build-conan --build=missing
+            cmake -B build-conan -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=build-conan/conan_toolchain.cmake
+            cmake --build build-conan
+            ./build-conan/test_app
+          "
+
+      - name: Verify tool versions
+        run: |
+          docker run --rm ${{ env.IMAGE_NAME }}:test bash -c "
+            echo '=== GCC Version ==='
+            gcc --version
+            echo ''
+            echo '=== Clang Version ==='
+            clang --version
+            echo ''
+            echo '=== CMake Version ==='
+            cmake --version
+            echo ''
+            echo '=== Ninja Version ==='
+            ninja --version
+            echo ''
+            echo '=== Conan Version ==='
+            conan --version
+            echo ''
+            echo '=== Mold Version ==='
+            mold --version
+          "
 
   publish:
-    name: Publish Docker Image
+    name: Publish to Docker Hub
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    permissions:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:  # ToDo meaning?
       contents: read
       packages: write
     steps:
@@ -69,27 +131,37 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Hub
+      - name: Log in to Docker Hub
         uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+        with:  # ToDo - or token?
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_IMAGE_NAME }}
+          images: ${{ env.IMAGE_NAME }}  # images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest
             type=sha,prefix={{branch}}-
 
-      - name: Build and push Docker image
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64  ## ToDo - from tt - check
+
+      - name: Update Docker Hub description  # ToDo - from tt - check
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+          readme-filepath: ./README.md
