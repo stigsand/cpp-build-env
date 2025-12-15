@@ -1,9 +1,3 @@
-Start repo from scratch
- - name it cpp-build-env
-
-Build and publish
- - add Docker Hub secrets
-
 Add test-project(s)
 
 Github Actions
@@ -13,4 +7,4 @@ Dockerfile
  - use Hadolint action
  - no USER or WORKDIR (see GitHub Actions documentation)
 
- Badge to README.md
+Badge to README.md
