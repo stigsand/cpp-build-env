@@ -12,12 +12,12 @@ A Docker image for building C++ projects
 
 This Docker image includes recent versions of many C++ development tools:
 
-- **Ubuntu 24.04 LTS** as the base image
+- **Ubuntu 25.10** as the base image
 - **Conan** - C++ package manager
 - **CMake** - Latest version from Kitware's APT repository
 - **Ninja** - Fast build system
 - **GCC** - GNU Compiler Collection version 15
-- **Clang** - LLVM C/C++ compiler from apt.llvm.org
+- **Clang** - LLVM C/C++ compiler version 21
 - **Mold** - Modern, high-performance linker
 
 ## Usage

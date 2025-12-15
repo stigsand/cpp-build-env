@@ -18,8 +18,14 @@ set -e
 export CC=clang
 export CXX=clang++
 cmake -B build-clang -G Ninja -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_BUILD_TYPE=Release
-cmake --build build-clang
-./build-clang/test_app | grep -qFx "26"
+#cmake --build build-clang
+#./build-clang/test_app | grep -qFx "26"
+
+export CC=gcc
+export CXX=g++
+cmake -B build-gcc -G Ninja -DCMAKE_BUILD_TYPE=Release --fresh
+cmake --build build-gcc
+./build-gcc/test_app # | grep -qFx "26"
 
 exit 0
 

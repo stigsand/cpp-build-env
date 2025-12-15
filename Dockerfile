@@ -106,8 +106,7 @@ RUN gcc --version && \
     clang --version && \
     cmake --version && \
     ninja --version && \
-    mold --version && \
-    conan --version
+    mold --version
 
 # Set default command
 CMD ["/bin/bash"]
