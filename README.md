@@ -55,3 +55,5 @@ docker run --rm -v $(pwd)/test:/workspace cpp-build-env bash -c "chmod +x /works
 ## CI/CD
 
 The Docker image is automatically built, tested, and published to Docker Hub via GitHub Actions on every push to the main branch.
+
+[![Build and Publish Image](https://github.com/stigsand/cpp-build-env/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/stigsand/cpp-build-env/actions/workflows/build-and-publish.yml)

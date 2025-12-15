@@ -1,4 +1,4 @@
-name: Build and Publish C++ Builder Image
+name: Build and Publish Image
 
 on:
   push:
@@ -6,13 +6,13 @@ on:
     paths:
       - 'Dockerfile'
       - 'test-project/**'
-      - '.github/workflows/docker-build.yml'
+      - '.github/workflows/build-and-publish.yml'
   pull_request:
     branches: [ "main" ]
     paths:
       - 'Dockerfile'
       - 'test-project/**'
-      - '.github/workflows/docker-build.yml'
+      - '.github/workflows/build-and-publish.yml'
   workflow_dispatch:
 
 env:
