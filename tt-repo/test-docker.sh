@@ -7,7 +7,7 @@ BLUE='\033[0;34m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-IMAGE_NAME="${IMAGE_NAME:-cpp-builder}"
+IMAGE_NAME="${IMAGE_NAME:-cpp-build-env}"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 
 echo -e "${BLUE}Building Docker image: ${IMAGE_NAME}:${IMAGE_TAG}${NC}"

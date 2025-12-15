@@ -7,9 +7,9 @@ A Docker-based build environment for C++ projects
 This Docker image includes:
 
 - **Ubuntu 22.04 LTS** as the base image
-- **GCC** - Latest GNU Compiler Collection
-- **Clang** - Latest LLVM C/C++ compiler from apt.llvm.org
-- **CMake** - Latest version from Kitware's official repository
+- **GCC** - GNU Compiler Collection version 15
+- **Clang** - LLVM C/C++ compiler from apt.llvm.org
+- **CMake** - Latest version from Kitware's APT repository
 - **Ninja** - Fast build system
 - **Conan** - C++ package manager
 - **Mold** - Modern, high-performance linker
