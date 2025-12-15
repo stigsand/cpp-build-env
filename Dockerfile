@@ -6,7 +6,7 @@ LABEL maintainer="Stig Sandnes <stig_sandnes@hotmail.com>" \
     description="C++ build environment with GCC, Clang, CMake, Conan, Ninja, and Mold"
 
 # Avoid interactive prompts during package installation - ToDo - from tt - check out
-ENV DEBIAN_FRONTEND=noninteractive \
+ARG DEBIAN_FRONTEND=noninteractive \
     TZ=Etc/UTC
 
 # Use pipefail to catch errors in pipes
@@ -44,10 +44,10 @@ RUN \
 # Install build tools and dependencies
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install --yes --no-install-recommends \
-    # GCC
+    # GCC 15
     gcc-15 \
     g++-15 \
-    # Clang/LLVM
+    # Clang/LLVM 21
     clang-21 \
     clang-tools-21 \
     clang-format-21 \
@@ -55,8 +55,14 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
     clang-tidy-21 \
     libc++-21-dev \
     libc++abi-21-dev \
+    lld-21 \
+    lldb-21 \
+    llvm-21 \
+    libfuzzer-21-dev \
     # CMake
     cmake \
+    cmake-curses-gui \
+    cmake-format \
     # Ninja
     ninja-build \
     # Mold
@@ -88,14 +94,12 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
         --slave /usr/bin/run-clang-tidy run-clang-tidy /usr/bin/run-clang-tidy-21
 
 # Install Conan
-RUN pipx install conan==2.24.0 && pipx ensurepath && source ~/.bashrc
+RUN pipx install conan==2.24.0 && pipx ensurepath
 
-# Set up environment  - ????
-ENV CC=gcc
-ENV CXX=g++
+ENV CC=gcc CXX=g++
 
 # Set working directory
-WORKDIR /workspace
+#WORKDIR /workspace
 
 # Switch to non-root user
 # USER builder
@@ -108,5 +112,4 @@ RUN gcc --version && \
     ninja --version && \
     mold --version
 
-# Set default command
 CMD ["/bin/bash"]

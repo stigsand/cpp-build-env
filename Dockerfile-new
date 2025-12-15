@@ -48,20 +48,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpolly-22-dev \
     libfuzzer-22-dev \
 
-# Set GCC 14 as default
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 \
-    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100 \
-    && update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-14 100 \
-    && update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-14 100
-
-# Set Clang 22 as alternative compiler (not default to avoid conflicts)
-RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-22 100 \
-    && update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-22 100 \
-    && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-22 100 \
-    && update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-22 100 \
-    && update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-22 100 \
-    && update-alternatives --install /usr/bin/lld lld /usr/bin/lld-22 100 \
-    && update-alternatives --install /usr/bin/lldb lldb /usr/bin/lldb-22 100
 
 # Create a non-root user for building
 RUN groupadd -r builder && useradd --no-log-init -r -g builder -m -s /bin/bash builder
