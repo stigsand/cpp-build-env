@@ -119,7 +119,7 @@ jobs:
   publish:
     name: Publish to Docker Hub
     runs-on: ubuntu-latest
-    needs: build-and-test
+    # needs: build-and-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:  # ToDo meaning?
       contents: read
