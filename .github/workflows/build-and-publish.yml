@@ -172,7 +172,7 @@ jobs:
     needs: publish
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     container:
-      image: ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+      image: ${{ vars.DOCKERHUB_USERNAME }}/cpp-build-env:latest
     permissions:
       contents: read
     steps:
