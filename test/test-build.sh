@@ -17,11 +17,9 @@ echo "Mold: $(mold --version)"
 set -e
 export CC=clang
 export CXX=clang++
-cmake -B build-clang -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake -B build-clang -G Ninja -DCMAKE_CXX_FLAGS="-stdlib=libc++" -DCMAKE_BUILD_TYPE=Release
 cmake --build build-clang
-./build-clang/test_app
 ./build-clang/test_app | grep -qFx "26"
-
 
 exit 0
 

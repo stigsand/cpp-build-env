@@ -86,7 +86,7 @@ ENV CXX=g++
 WORKDIR /workspace
 
 # Switch to non-root user
-USER builder
+# USER builder
 RUN echo "Path: $PATH" && pipx ensurepath
 
 # Verify installations
