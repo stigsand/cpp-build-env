@@ -2,13 +2,13 @@ name: Build and Publish Image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
     paths:
       - 'Dockerfile'
       - 'test-project/**'
       - '.github/workflows/build-and-publish.yml'
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
     paths:
       - 'Dockerfile'
       - 'test-project/**'
@@ -119,7 +119,7 @@ jobs:
   publish:
     name: Publish to Docker Hub
     runs-on: ubuntu-latest
-    # needs: build-and-test
+    needs: [ lint, build-and-test ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:  # ToDo meaning?
       contents: read
