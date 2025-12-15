@@ -99,7 +99,7 @@ RUN pipx install conan==2.24.0 && pipx ensurepath
 ENV CC=gcc CXX=g++
 
 # Set working directory
-#WORKDIR /workspace
+WORKDIR /workspace
 
 # Switch to non-root user
 # USER builder

@@ -165,3 +165,34 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           readme-filepath: ./README.md
+
+  test-published-image:
+    name: Test Published Image
+    runs-on: ubuntu-latest
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    container:
+      image: ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Test GCC build
+        working-directory: test
+        run: |
+          echo PWD: $(pwd)
+          ls -la
+          cmake -B build-gcc -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++
+          cmake --build build-gcc
+          ./build-gcc/test_app
+
+      - name: Test Clang build
+        working-directory: test
+        run: |
+          echo PWD: $(pwd)
+          ls -la
+          cmake -B build-clang -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++
+          cmake --build build-clang
+          ./build-clang/test_app
