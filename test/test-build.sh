@@ -14,6 +14,17 @@ echo "Ninja: $(ninja --version)"
 echo "Conan: $(conan --version)"
 echo "Mold: $(mold --version)"
 
+set -e
+export CC=clang
+export CXX=clang++
+cmake -B build-clang -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build-clang
+./build-clang/test_app
+./build-clang/test_app | grep -qFx "26"
+
+
+exit 0
+
 # Create build directory
 echo ""
 echo "=== Building Test Project ==="

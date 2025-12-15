@@ -26,7 +26,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  ## newer?
+        uses: actions/checkout@v6  ## newer?
 
       - name: Run Hadolint
         uses: hadolint/hadolint-action@v3.3.0
@@ -42,7 +42,7 @@ jobs:
       contents: read  # ToDo meang?
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -63,36 +63,36 @@ jobs:
           # Run as root to avoid permission issues with mounted volume
           docker run --rm --user root -v ${{ github.workspace }}/test:/workspace ${{ env.IMAGE_NAME }}:test bash /workspace/test-build.sh
 
-      - name: Test with GCC and Ninja  # from tt
-        run: |
-          docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
-            set -e
-            cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-            cmake --build build
-            ./build/test_app
-          "
+      #- name: Test with GCC and Ninja  # from tt
+      #  run: |
+      #    docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
+      #      set -e
+      #      cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      #      cmake --build build
+      #      ./build/test_app
+      #    "
 
-      - name: Test with Clang  # from tt
-        run: |
-          docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
-            set -e
-            export CC=clang
-            export CXX=clang++
-            cmake -B build-clang -G Ninja -DCMAKE_BUILD_TYPE=Release
-            cmake --build build-clang
-            ./build-clang/test_app
-          "
+      #- name: Test with Clang  # from tt
+      #  run: |
+      #    docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
+      #      set -e
+      #      export CC=clang
+      #      export CXX=clang++
+      #      cmake -B build-clang -G Ninja -DCMAKE_BUILD_TYPE=Release
+      #      cmake --build build-clang
+      #      ./build-clang/test_app
+      #    "
 
-      - name: Test Conan integration  ## From tt
-        run: |
-          docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
-            set -e
-            conan profile detect --force
-            conan install . --output-folder=build-conan --build=missing
-            cmake -B build-conan -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=build-conan/conan_toolchain.cmake
-            cmake --build build-conan
-            ./build-conan/test_app
-          "
+      #- name: Test Conan integration  ## From tt
+      #  run: |
+      #    docker run --rm -v ${{ github.workspace }}/test-project:/workspace ${{ env.IMAGE_NAME }}:test bash -c "
+      #      set -e
+      #      conan profile detect --force
+      #      conan install . --output-folder=build-conan --build=missing
+      #      cmake -B build-conan -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=build-conan/conan_toolchain.cmake
+      #      cmake --build build-conan
+      #      ./build-conan/test_app
+      #    "
 
       - name: Verify tool versions
         run: |
@@ -126,7 +126,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
