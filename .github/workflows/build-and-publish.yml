@@ -184,6 +184,7 @@ jobs:
         run: |
           echo PWD: $(pwd)
           ls -la
+          echo ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
           cmake -B build-gcc -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++
           cmake --build build-gcc
           ./build-gcc/test_app
