@@ -1,17 +1,17 @@
 # cpp-build-env
 
-A Docker-based build environment for C++ projects
+A Docker image for building C++ projects
 
 ## Features
 
 This Docker image includes:
 
-- **Ubuntu 22.04 LTS** as the base image
-- **GCC** - GNU Compiler Collection version 15
-- **Clang** - LLVM C/C++ compiler from apt.llvm.org
+- **Ubuntu 24.04 LTS** as the base image
+- **Conan** - C++ package manager
 - **CMake** - Latest version from Kitware's APT repository
 - **Ninja** - Fast build system
-- **Conan** - C++ package manager
+- **GCC** - GNU Compiler Collection version 15
+- **Clang** - LLVM C/C++ compiler from apt.llvm.org
 - **Mold** - Modern, high-performance linker
 
 ## Usage

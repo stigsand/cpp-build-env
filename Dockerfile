@@ -73,7 +73,7 @@ RUN pipx ensurepath && pipx install "conan>=2.0.0" \
 # Alternative from tt
 # Install Conan package manager
 #RUN pip3 install --no-cache-dir --break-system-packages conan
-RUN echo Path: $PATH
+RUN echo "Path: $PATH"
 
 
 
@@ -87,9 +87,7 @@ WORKDIR /workspace
 
 # Switch to non-root user
 USER builder
-RUN echo Path: $PATH
-
-RUN pipx ensurepath
+RUN echo "Path: $PATH" && pipx ensurepath
 
 # Verify installations
 RUN gcc --version && \

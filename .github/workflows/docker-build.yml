@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: cpp-build-env  # stigsand/cpp-build-env
+  IMAGE_NAME: cpp-build-env
 
 jobs:
   lint:
@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v4  ## newer?
 
       - name: Run Hadolint
-        uses: hadolint/hadolint-action@v3.3.0  # newer?
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: Dockerfile
           failure-threshold: warning
