@@ -2,7 +2,6 @@
 
 [![Build and Publish Image](https://github.com/stigsand/cpp-build-env/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/stigsand/cpp-build-env/actions/workflows/build-and-publish.yml)
 [![Docker Image Size](https://img.shields.io/docker/image-size/stigsand/cpp-build-env/latest)](https://hub.docker.com/r/stigsand/cpp-build-env)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/stigsand/cpp-build-env/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/stigsand/cpp-build-env)](https://hub.docker.com/r/stigsand/cpp-build-env)
 [![C++](https://img.shields.io/badge/C++-00599C?logo=cplusplus&logoColor=white)](https://isocpp.org/)
 

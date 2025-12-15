@@ -1,33 +1,5 @@
 
-# State-of-the-art C++ Build Container
-# Based on Ubuntu 24.04 LTS (Noble Numbat)
-FROM ubuntu:24.04
 
-# Metadata
-LABEL maintainer="Stig Sandnes <stig_sandnes@hotmail.com>" \
-      description="Modern C++ build container with latest CMake, GCC, and Clang" \
-      base.image="ubuntu:24.04" \
-      cmake.source="apt.kitware.com" \
-      llvm.source="apt.llvm.org" \
-      gcc.source="ubuntu-toolchain-r/test"
-
-# Prevent interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive \
-    TZ=UTC
-
-# Install basic dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    gpg \
-    wget \
-    curl \
-    software-properties-common \
-    apt-transport-https \
-    gnupg \
-    lsb-release \
-    && rm -rf /var/lib/apt/lists/*
-
-# Add Kitware APT repository for latest CMake
 RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
     | gpg --dearmor - \
     | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
@@ -56,7 +28,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # Latest GCC (GCC 14)
     gcc-14 \
     g++-14 \
-    gfortran-14 \
     # Latest Clang/LLVM (version 22)
     clang-22 \
     clang-tools-22 \
@@ -76,31 +47,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libomp-22-dev \
     libpolly-22-dev \
     libfuzzer-22-dev \
-    # Additional development tools
-    ninja-build \
-    make \
-    autoconf \
-    automake \
-    libtool \
-    pkg-config \
-    git \
-    ccache \
-    # Common libraries
-    libssl-dev \
-    zlib1g-dev \
-    libbz2-dev \
-    libreadline-dev \
-    libsqlite3-dev \
-    libncurses5-dev \
-    libgdbm-dev \
-    libnss3-dev \
-    libffi-dev \
-    liblzma-dev \
-    # Debugging and analysis tools
-    gdb \
-    valgrind \
-    strace \
-    && rm -rf /var/lib/apt/lists/*
 
 # Set GCC 14 as default
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 \
