@@ -1,10 +1,10 @@
-# cpp-build-env
+# cpp-build-env (work in progress)
 
 A Docker image for building C++ projects
 
 ## Features
 
-This Docker image includes:
+This Docker image includes recent versions of many C++ development tools:
 
 - **Ubuntu 24.04 LTS** as the base image
 - **Conan** - C++ package manager
