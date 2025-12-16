@@ -44,7 +44,7 @@ jobs:
           IMAGE=${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           VERSION=${{ steps.version.outputs.version }}
           VERSION_NO_V=${{ steps.version.outputs.version_no_v }}
-          SHA_TAG=main-$(echo ${{ github.sha }} | cut -c1-7)
+          SHA_TAG=sha-$(echo ${{ github.sha }} | cut -c1-7)
           
           # Pull the image tagged with the Git SHA
           docker pull ${IMAGE}:${SHA_TAG}
