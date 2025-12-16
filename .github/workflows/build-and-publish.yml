@@ -144,7 +144,9 @@ jobs:
           images: ${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest
-            type=sha,format=long
+            type=sha
+        env:
+          DOCKER_METADATA_SHORT_SHA_LENGTH: 8
 
       - name: Build and push to Docker Hub
         uses: docker/build-push-action@v6
