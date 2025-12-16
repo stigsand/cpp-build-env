@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag name for the Docker image (e.g., v1.0.0)'
+        description: 'Tag name for the Docker image (e.g. v1.0.0)'
         required: true
         type: string
 
@@ -39,18 +39,19 @@ jobs:
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "version_no_v=${VERSION#v}" >> $GITHUB_OUTPUT
 
-      - name: Pull latest image and create release tags
+      - name: Pull SHA-tagged image and create release tags
         run: |
           IMAGE=${{ vars.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
           VERSION=${{ steps.version.outputs.version }}
           VERSION_NO_V=${{ steps.version.outputs.version_no_v }}
+          SHA_TAG=main-$(echo ${{ github.sha }} | cut -c1-7)
           
-          # Pull the latest image
-          docker pull ${IMAGE}:latest
+          # Pull the image tagged with the Git SHA
+          docker pull ${IMAGE}:${SHA_TAG}
           
           # Tag with version strings
-          docker tag ${IMAGE}:latest ${IMAGE}:${VERSION}
-          docker tag ${IMAGE}:latest ${IMAGE}:${VERSION_NO_V}
+          docker tag ${IMAGE}:${SHA_TAG} ${IMAGE}:${VERSION}
+          docker tag ${IMAGE}:${SHA_TAG} ${IMAGE}:${VERSION_NO_V}
           
           # Push all tags
           docker push ${IMAGE}:${VERSION}
